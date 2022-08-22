@@ -12,7 +12,7 @@ public class Main {
         System.out.println("\n## Demo Exception Handling");
 
         et.function1();
-        et.function2("2345");
+        et.function2("5678");
         et.function3("./testdata/myfile.txt");
 
         int linesRead = et.function4("./testdata/myfile.txt");
