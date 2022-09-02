@@ -18,7 +18,20 @@ public class DateFormatTest {
         System.out.println("Constructed DateFormatTest");
     }
 
-    public void SdfFunction(String dateString){
+    public void testSimpleDateFormat() {
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        final String sysdate = sdf.format(new Date());
+        System.out.println("SDF Date String: " + sysdate);
+    }
+
+    public String getFormattedDateTimeNow() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm").withZone(ZoneId.of("Europe/Amsterdam"));
+        final String sysdate = dtf.format(LocalDateTime.now());
+        System.out.println("SDF Date String: " + sysdate);
+        return sysdate;
+    }
+
+    public void sdfFunction(String dateString){
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         try {
@@ -38,7 +51,7 @@ public class DateFormatTest {
         }
     }
 
-    public void DtfFunction(String dateString){
+    public void dtfFunction(String dateString){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
             LocalDate ld = LocalDate.parse(dateString, dtf);
@@ -48,9 +61,9 @@ public class DateFormatTest {
         }
     }
 
-    public static void MultiFunction(String dateString){
+    public static void multiFunction(String dateString){
 
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -63,13 +76,13 @@ public class DateFormatTest {
             }
         };
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             executorService.submit(runnable);
         }
         executorService.shutdown();
     }
 
-    public void EndOfMonth(){
+    public void endOfMonth(){
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, Calendar.FEBRUARY);
         c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -77,7 +90,7 @@ public class DateFormatTest {
         System.out.println("Date: End of Month:" + endOfMonth );
     }
 
-    public void EndOfMonth2(){
+    public void endOfMonth2(){
         LocalDate ld = LocalDate.now();
         LocalDate ld_start = ld.withDayOfMonth(1);
         LocalDate ld_end = ld.plusMonths(1).withDayOfMonth(1).minusDays(1);
@@ -86,7 +99,7 @@ public class DateFormatTest {
         System.out.println("End: Last: " + ld_end);
     }
 
-    public Date EndOfCurrentMonth(){
+    public Date endOfCurrentMonth(){
         ZoneId zoneId = ZoneId.systemDefault(); // Europe/Amsterdam
         System.out.println("ZoneId: " + zoneId);
         try {
@@ -168,13 +181,13 @@ public class DateFormatTest {
         return false;
     }
 
-    public void IncrementMonth1(LocalDate ld_now){
+    public void incrementMonth1(LocalDate ld_now){
         // LocalDate ld_now  = LocalDate.now();
         LocalDate ld_next = ld_now.plusMonths(1).withDayOfMonth(1);
         System.out.println("Increment Month: " + ld_now + " Result: " + ld_next);
     }
 
-    public LocalDate IncrementMonth(LocalDate ld_input){
+    public LocalDate incrementMonth(LocalDate ld_input){
         try {
             LocalDate ld_next = ld_input.plusMonths(1).withDayOfMonth(1);
             System.out.println("Increment Month: " + ld_input + " Result: " + ld_next);
@@ -190,7 +203,7 @@ public class DateFormatTest {
      */
     public String getNextPricePeriodDateString() {
         try {
-            LocalDate localDate = this.IncrementMonth(LocalDate.now(ZoneId.of(PMR_ZONE)));
+            LocalDate localDate = this.incrementMonth(LocalDate.now(ZoneId.of(PMR_ZONE)));
             String result = "01" + "-" + String.format("%02d", localDate.getMonthValue()) + "-" + localDate.getYear();
             return result;
         } catch (DateTimeException dte ) {
@@ -205,12 +218,34 @@ public class DateFormatTest {
      */
     public String getNextPricePeriodFullString() {
         try {
-            LocalDate localDate = this.IncrementMonth(LocalDate.now(ZoneId.of(PMR_ZONE)));
+            LocalDate localDate = this.incrementMonth(LocalDate.now(ZoneId.of(PMR_ZONE)));
             String result = "prijzen_" + localDate.getYear() + "-" + String.format("%02d", localDate.getMonthValue()) + "-01";
             return result;
         } catch (DateTimeException dte ){
             return null;
         }
+    }
+
+    public String formatDateAsString(DateTimeFormatter dtf, final Date d) {
+        String dateTimeStr = null;
+
+        Instant i = d.toInstant();
+
+        try {
+            LocalDateTime ld = LocalDateTime.ofInstant(i, dtf.getZone());
+            dateTimeStr = dtf.format(ld);
+        } catch(DateTimeException dte) {
+            System.out.println("Format Date As String: Error converting date: " + d + " : " + dte );
+        }
+        return dateTimeStr;
+    }
+
+
+    public String setExportDateTime(final Date d) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmm").withZone(ZoneId.of("Europe/Amsterdam"));
+
+        return formatDateAsString(dtf, d);
     }
 
 }
