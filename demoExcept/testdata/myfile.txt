@@ -3,3 +3,6 @@
 3;blue
 4;yellow
 x;not a colour
+6;purple
+7;brown
+

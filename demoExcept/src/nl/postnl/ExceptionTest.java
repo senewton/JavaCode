@@ -20,16 +20,27 @@ public class ExceptionTest {
     }
 
 
-    public void function2(String s) throws NumberFormatException {
-        try{
-            int j = Integer.parseInt(s);
-            System.out.println("Function 2: i = " + j );
-        } catch(NumberFormatException nfe) {
-            // throw new NumberFormatException("function2 exception");
-            System.out.println("F2 Caught Exception: " + nfe);
+    public void function2(String s) {
+        if(s == null) {
+            System.out.println("F2 null pointer received");
+            //throw new NullPointerException("function received null");
+        } else {
+            try {
+                int j = Integer.parseInt(s);
+                System.out.println("Function 2: i = " + j);
+            } catch (NumberFormatException nfe) {
+                System.out.println("F2 Caught Exception: " + nfe);
+                //throw new NumberFormatException("function2 exception");
+            }
         }
     }
 
+    // Function that can throw an IOException
+    public void createFile(String path, String text) throws IOException {
+        FileWriter writer = new FileWriter(path, true);
+        writer.write(text+"\n");
+        writer.close();
+    }
 
     public boolean function3(String fn)  {
         try{
@@ -70,9 +81,7 @@ public class ExceptionTest {
             } else {
                 System.out.println("F4 No need to close file if never opened");
             }
-            // return linesRead;
         }
-        //return linesRead;
     }
 
     public int function5(String fn) {
@@ -84,18 +93,21 @@ public class ExceptionTest {
             String row;
 
             while ((row = buff.readLine()) != null ){
-                int rowId = Integer.parseInt(row.substring(0,row.indexOf(';')));
-                String colourDesc = row.substring(row.indexOf(';')+1);
-                linesRead++;
-                System.out.println("\tF5 Line: " + linesRead + " ID:" + rowId + " Colour:" + colourDesc );
+                try{
+                    int rowId = Integer.parseInt(row.substring(0,row.indexOf(';')));
+                    String colourDesc = row.substring(row.indexOf(';')+1);
+                    linesRead++;
+                    System.out.println("\tF5 Line: " + linesRead + " ID:" + rowId + " Colour:" + colourDesc );
+                } catch(NumberFormatException nfe){
+                    System.out.println("F5 Failed to parse ID: " + nfe );
+                } catch(StringIndexOutOfBoundsException ioe) {
+                    System.out.println("F5 String out of bounds:" + ioe );
+                }
             }
             return linesRead;
         } catch(IOException ioe){
             System.out.println("F5 Failed to open or read file: " + fn + ioe);
-            return linesRead;
-        } catch(NumberFormatException nfe){
-            System.out.println("F5 Failed to parse ID: " + nfe );
-            return linesRead;
+            // return linesRead;
         }
         finally {
             if(buff != null ) {
@@ -109,6 +121,7 @@ public class ExceptionTest {
                 System.out.println("F5 No need to close file if never opened");
             }
         }
+        return linesRead;
     }
 
 }
