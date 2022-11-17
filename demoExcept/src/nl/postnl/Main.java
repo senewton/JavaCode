@@ -10,7 +10,7 @@ public class Main {
         // System.out.println("SDF Test: " + DateUtil.getSimpleDateFormat().format(new Date()));
         // System.out.println("DTF Test: " + DateUtil.getFormattedDateTimeNow());
         testExceptions();
-        // doSomethingRisky();
+        //doSomethingRisky();
     }
 
 
@@ -34,7 +34,7 @@ public class Main {
         et.function1();
 
         //try {
-            et.function2(null );
+            //et.function2(null );
         /*} catch(NumberFormatException e){
             System.out.println("NFE: Back again");
         } catch(NullPointerException e){
@@ -42,7 +42,7 @@ public class Main {
         }*/
 
         // ===
-        String filePath = "hello.txt";
+        String filePath = "hello___.txt";
         String text = "Hello World";
 
         try {

@@ -13,24 +13,39 @@ public class ExceptionTest {
     public void function1(){
         try {
             int i = Integer.parseInt("324");
+            System.out.println("Function 1: i = " + i);
+        } catch(Exception e){
+            System.out.println("Exception e:" + e);
+        } finally{
+            System.out.println("Finally");
+        }
+
+        System.out.printf("Program ended\n");
+    }
+
+    /*
+
+try {
+            int i = Integer.parseInt("324");
             System.out.println("Function 1: i = " + i );
         } catch (NumberFormatException nfe){
             System.out.println("F1 Caught Exception: " + nfe);
         }
-    }
 
+
+     */
 
     public void function2(String s) {
         if(s == null) {
             System.out.println("F2 null pointer received");
-            //throw new NullPointerException("function received null");
+            throw new NullPointerException("function received null");
         } else {
             try {
                 int j = Integer.parseInt(s);
                 System.out.println("Function 2: i = " + j);
             } catch (NumberFormatException nfe) {
                 System.out.println("F2 Caught Exception: " + nfe);
-                //throw new NumberFormatException("function2 exception");
+                throw new NumberFormatException("function2 exception");
             }
         }
     }
